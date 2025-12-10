@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-# 1. Configuración inicial (igual que antes)
+#  Configuración inicial (igual que antes)
 load_dotenv()
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
@@ -26,7 +26,7 @@ def generate_fake_embedding(center_val=0.0):
 def seed_database():
     print("🌱 Iniciando siembra de datos falsos...")
 
-    # --- LOTE 1: DATOS HISTÓRICOS (NORMALES) ---
+    # --- DATOS HISTÓRICOS (NORMALES) ---
     # Simulamos datos de hace 10 días
     old_date = datetime.now() - timedelta(days=10)
     print(f"Generando 50 registros 'normales' con fecha: {old_date}...")
@@ -37,7 +37,7 @@ def seed_database():
             "content": "Pregunta normal sobre el negocio",
             "type": "query",
             "timestamp": old_date.isoformat(),
-            # Usamos 0.0 como centro para los datos "normales"
+            # Usamos 0.0 como centro para los datos normales
             "embedding": generate_fake_embedding(center_val=0.0) 
         })
     
@@ -45,8 +45,8 @@ def seed_database():
     supabase.table('embeddings_log').insert(old_data).execute()
     print("✅ Datos históricos insertados.")
 
-    # --- LOTE 2: DATOS RECIENTES (DRIFT / DESVIADOS) ---
-    # Simulamos datos de HOY
+    # --- DATOS RECIENTES (DRIFT / DESVIADOS) ---
+    # Simulamos datos de hoy
     current_date = datetime.now()
     print(f"Generando 20 registros 'raros' (drift) con fecha: {current_date}...")
 
@@ -56,7 +56,7 @@ def seed_database():
             "content": "Pregunta extraña sobre cocina o videojuegos",
             "type": "query",
             "timestamp": current_date.isoformat(),
-            # ¡AQUÍ ESTÁ EL TRUCO! Usamos 0.5 como centro. 
+            # Usamos 0.5 como centro. 
             # Matemáticamente, esto está "lejos" de 0.0
             "embedding": generate_fake_embedding(center_val=0.5)
         })
